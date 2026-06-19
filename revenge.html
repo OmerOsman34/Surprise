@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ekremden İntikam Al! 🥊</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a6f 25%, #c92a2a 50%, #a61e4d 75%, #ff6b6b 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: crosshair;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .title {
+            position: absolute;
+            top: 30px;
+            font-size: 2.5rem;
+            color: white;
+            text-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+            z-index: 5;
+        }
+
+        .character-zone {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            perspective: 1000px;
+        }
+
+        .character {
+            position: relative;
+            width: 200px;
+            height: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            user-select: none;
+            transition: transform 0.1s ease;
+        }
+
+        .character.hit {
+            animation: hitShake 0.3s ease-out;
+        }
+
+        @keyframes hitShake {
+            0% { transform: translateX(0) rotateZ(0deg) scale(1); }
+            25% { transform: translateX(-15px) rotateZ(-5deg) scale(0.98); }
+            50% { transform: translateX(15px) rotateZ(5deg) scale(0.98); }
+            75% { transform: translateX(-10px) rotateZ(-3deg) scale(0.99); }
+            100% { transform: translateX(0) rotateZ(0deg) scale(1); }
+        }
+
+        /* Kafa (kel) */
+        .head {
+            width: 80px;
+            height: 90px;
+            background: linear-gradient(135deg, #d4a574, #c9925a);
+            border-radius: 50%;
+            position: relative;
+            box-shadow: inset -2px -2px 5px rgba(0, 0, 0, 0.3), 
+                        0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Gözler */
+        .eyes {
+            position: absolute;
+            width: 60px;
+            height: 30px;
+            top: 30px;
+            left: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .eye {
+            width: 15px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .pupil {
+            width: 8px;
+            height: 12px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            top: 4px;
+            left: 3.5px;
+        }
+
+        /* Kaş */
+        .eyebrow {
+            position: absolute;
+            width: 40px;
+            height: 4px;
+            background: #333;
+            top: 20px;
+            left: 10px;
+            border-radius: 2px;
+        }
+
+        .eyebrow.right {
+            left: 50px;
+        }
+
+        .character.angry .eyebrow {
+            transform: rotateZ(-20deg);
+        }
+
+        .character.angry .eyebrow.right {
+            transform: rotateZ(20deg);
+        }
+
+        /* Burun */
+        .nose {
+            position: absolute;
+            width: 8px;
+            height: 12px;
+            background: #a67c52;
+            top: 50px;
+            left: 36px;
+            border-radius: 50%;
+        }
+
+        /* Ağız */
+        .mouth {
+            position: absolute;
+            width: 30px;
+            height: 8px;
+            background: #8b4513;
+            top: 65px;
+            left: 25px;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .character.angry .mouth {
+            background: #6b0000;
+            border-radius: 20px 20px 0 0;
+            height: 10px;
+        }
+
+        /* Vücut (kaslı) */
+        .body {
+            width: 100px;
+            height: 120px;
+            background: linear-gradient(135deg, #d4a574, #c9925a);
+            border-radius: 10px;
+            position: relative;
+            margin-top: 10px;
+            box-shadow: inset -3px -3px 5px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Kas tanımları */
+        .muscle-line {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 50%;
+        }
+
+        .muscle-left {
+            width: 20px;
+            height: 40px;
+            left: 10px;
+            top: 20px;
+            background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+            border-radius: 50%;
+        }
+
+        .muscle-right {
+            width: 20px;
+            height: 40px;
+            right: 10px;
+            top: 20px;
+            background: linear-gradient(to left, rgba(0, 0, 0, 0.3), transparent);
+            border-radius: 50%;
+        }
+
+        .abs {
+            position: absolute;
+            width: 8px;
+            height: 25px;
+            background: rgba(0, 0, 0, 0.2);
+            left: 46px;
+            top: 40px;
+            border-radius: 4px;
+        }
+
+        .abs:nth-child(n+5) {
+            left: 46px;
+        }
+
+        /* Kollar */
+        .arm {
+            position: absolute;
+            width: 40px;
+            height: 25px;
+            background: linear-gradient(135deg, #d4a574, #c9925a);
+            top: 25px;
+            border-radius: 50%;
+            box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .arm-left {
+            left: -25px;
+        }
+
+        .arm-right {
+            right: -25px;
+        }
+
+        /* Bacaklar */
+        .legs {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .leg {
+            width: 25px;
+            height: 60px;
+            background: linear-gradient(135deg, #d4a574, #c9925a);
+            border-radius: 5px;
+            box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Ayakkabı */
+        .shoe {
+            width: 35px;
+            height: 20px;
+            background: #333;
+            border-radius: 0 0 8px 8px;
+            margin: -5px auto 0;
+        }
+
+        /* Boks eldivesi */
+        .boxing-glove {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 3.5rem;
+            cursor: pointer;
+            animation: floatGlove 3s ease-in-out infinite;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.3));
+        }
+
+        @keyframes floatGlove {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(10deg); }
+        }
+
+        .glove-left {
+            left: 20px;
+            top: 150px;
+            animation-delay: 0s;
+        }
+
+        .glove-right {
+            right: 20px;
+            top: 150px;
+            animation-delay: 0.5s;
+        }
+
+        .boxing-glove.punch {
+            animation: punchAnimation 0.5s ease-out;
+        }
+
+        @keyframes punchAnimation {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+
+        /* Hit effect */
+        .hit-effect {
+            position: absolute;
+            font-size: 2rem;
+            animation: hitEffectAnim 0.6s ease-out forwards;
+            pointer-events: none;
+            font-weight: bold;
+        }
+
+        @keyframes hitEffectAnim {
+            0% {
+                transform: translate(0, 0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(0, -80px) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        .stats {
+            position: absolute;
+            bottom: 30px;
+            left: 30px;
+            color: white;
+            font-size: 1.5rem;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+            z-index: 5;
+        }
+
+        .hit-count {
+            font-weight: bold;
+            color: #ffff00;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: bold;
+            z-index: 10;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        .back-button:active {
+            transform: scale(0.95);
+        }
+
+        @media (max-width: 768px) {
+            .character-zone {
+                width: 100%;
+                height: auto;
+                padding: 20px;
+            }
+
+            .character {
+                width: 150px;
+                height: 210px;
+            }
+
+            .head {
+                width: 60px;
+                height: 70px;
+            }
+
+            .body {
+                width: 75px;
+                height: 90px;
+            }
+
+            .boxing-glove {
+                width: 60px;
+                height: 60px;
+                font-size: 2.5rem;
+            }
+
+            .stats {
+                bottom: 20px;
+                left: 15px;
+                font-size: 1.2rem;
+            }
+
+            .title {
+                font-size: 1.8rem;
+                top: 20px;
+            }
+
+            .back-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .character-zone {
+                width: 100%;
+                height: auto;
+                padding: 10px;
+            }
+
+            .character {
+                width: 120px;
+                height: 170px;
+            }
+
+            .head {
+                width: 50px;
+                height: 60px;
+            }
+
+            .body {
+                width: 60px;
+                height: 75px;
+            }
+
+            .arm {
+                width: 30px;
+                height: 20px;
+            }
+
+            .leg {
+                width: 20px;
+                height: 50px;
+            }
+
+            .boxing-glove {
+                width: 50px;
+                height: 50px;
+                font-size: 2rem;
+                left: 10px !important;
+                right: 10px !important;
+            }
+
+            .stats {
+                bottom: 15px;
+                left: 10px;
+                font-size: 1rem;
+            }
+
+            .title {
+                font-size: 1.4rem;
+                top: 15px;
+            }
+
+            .back-button {
+                padding: 8px 15px;
+                font-size: 0.8rem;
+                top: 10px;
+                left: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='index.html'">← Geri Dön</button>
+    
+    <div class="game-container">
+        <div class="title">Ekremden İntikam Al! 🥊</div>
+        
+        <div class="character-zone" id="characterZone">
+            <div class="boxing-glove glove-left" id="gloveLeft">🥊</div>
+            <div class="boxing-glove glove-right" id="gloveRight">🥊</div>
+            
+            <div class="character" id="character">
+                <div class="head">
+                    <div class="eyebrow"></div>
+                    <div class="eyebrow right"></div>
+                    <div class="eyes">
+                        <div class="eye">
+                            <div class="pupil"></div>
+                        </div>
+                        <div class="eye">
+                            <div class="pupil"></div>
+                        </div>
+                    </div>
+                    <div class="nose"></div>
+                    <div class="mouth"></div>
+                </div>
+                
+                <div class="body">
+                    <div class="muscle-left"></div>
+                    <div class="muscle-right"></div>
+                    <div class="abs"></div>
+                    <div class="abs"></div>
+                    <div class="abs"></div>
+                </div>
+                
+                <div class="arm arm-left"></div>
+                <div class="arm arm-right"></div>
+                
+                <div class="legs">
+                    <div class="leg">
+                        <div class="shoe"></div>
+                    </div>
+                    <div class="leg">
+                        <div class="shoe"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="stats">
+            Vuru Sayısı: <span class="hit-count">0</span>
+        </div>
+    </div>
+
+    <script>
+        let hitCount = 0;
+        const character = document.getElementById('character');
+        const characterZone = document.getElementById('characterZone');
+        const hitCountDisplay = document.querySelector('.hit-count');
+        const gloveLeft = document.getElementById('gloveLeft');
+        const gloveRight = document.getElementById('gloveRight');
+
+        const hitMessages = ['💥', '🎯', '⚡', '💫', '🔥', '✨', '🌟'];
+
+        characterZone.addEventListener('click', (e) => {
+            // Vuruş animasyonu
+            character.classList.remove('hit');
+            void character.offsetWidth; // Reflow trigger
+            character.classList.add('hit');
+            
+            // Kızgın express
+            character.classList.add('angry');
+            setTimeout(() => {
+                character.classList.remove('angry');
+            }, 300);
+
+            // Boks eldivesi efekti
+            const glove = Math.random() > 0.5 ? gloveLeft : gloveRight;
+            glove.classList.remove('punch');
+            void glove.offsetWidth;
+            glove.classList.add('punch');
+
+            // Hit mesajı
+            const hitEffect = document.createElement('div');
+            hitEffect.className = 'hit-effect';
+            hitEffect.textContent = hitMessages[Math.floor(Math.random() * hitMessages.length)];
+            hitEffect.style.left = e.clientX + 'px';
+            hitEffect.style.top = e.clientY + 'px';
+            document.body.appendChild(hitEffect);
+            
+            setTimeout(() => hitEffect.remove(), 600);
+
+            // Sayı artırma
+            hitCount++;
+            hitCountDisplay.textContent = hitCount;
+
+            // Particle effect
+            createPunchParticles(e.clientX, e.clientY);
+
+            // Ses efekti (CSS animation ile sesin yerini alması)
+            createShockwave(e.clientX, e.clientY);
+        });
+
+        function createPunchParticles(x, y) {
+            for (let i = 0; i < 8; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'hit-effect';
+                particle.textContent = '💥';
+                particle.style.left = x + 'px';
+                particle.style.top = y + 'px';
+                particle.style.fontSize = '1rem';
+                particle.style.opacity = '0.7';
+                
+                const angle = (Math.PI * 2 * i) / 8;
+                const distance = 40;
+                const tx = Math.cos(angle) * distance;
+                const ty = Math.sin(angle) * distance;
+                
+                particle.style.setProperty('--tx', tx + 'px');
+                particle.style.setProperty('--ty', ty + 'px');
+                particle.style.animation = `particleSpread 0.6s ease-out forwards`;
+                
+                document.body.appendChild(particle);
+                setTimeout(() => particle.remove(), 600);
+            }
+        }
+
+        function createShockwave(x, y) {
+            const shockwave = document.createElement('div');
+            shockwave.style.position = 'fixed';
+            shockwave.style.left = x + 'px';
+            shockwave.style.top = y + 'px';
+            shockwave.style.width = '10px';
+            shockwave.style.height = '10px';
+            shockwave.style.borderRadius = '50%';
+            shockwave.style.border = '2px solid #ff6b6b';
+            shockwave.style.pointerEvents = 'none';
+            shockwave.style.animation = `shockwaveEffect 0.6s ease-out forwards`;
+            
+            document.body.appendChild(shockwave);
+            setTimeout(() => shockwave.remove(), 600);
+        }
+
+        // Add animations to style
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes particleSpread {
+                0% {
+                    transform: translate(0, 0) scale(1);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translate(var(--tx), var(--ty)) scale(0);
+                    opacity: 0;
+                }
+            }
+
+            @keyframes shockwaveEffect {
+                0% {
+                    transform: scale(1);
+                    opacity: 1;
+                }
+                100% {
+                    transform: scale(8);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Keyboard support
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                // Ekrana orta noktaya tıkla simulasyonu
+                const centerX = window.innerWidth / 2;
+                const centerY = window.innerHeight / 2;
+                characterZone.dispatchEvent(new MouseEvent('click', {
+                    clientX: centerX,
+                    clientY: centerY
+                }));
+            }
+        });
+    </script>
+</body>
+</html>

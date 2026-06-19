@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tuğbaya Sürpriz ❤️</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #667eea 100%);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            text-align: center;
+            position: relative;
+            z-index: 10;
+            max-width: 800px;
+        }
+
+        .main-text {
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 105, 180, 0.6);
+            margin-bottom: 30px;
+            letter-spacing: 2px;
+            animation: textGlow 2s ease-in-out infinite;
+        }
+
+        @keyframes textGlow {
+            0%, 100% { 
+                text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 105, 180, 0.6);
+            }
+            50% { 
+                text-shadow: 0 0 30px rgba(255, 255, 255, 1), 0 0 60px rgba(255, 105, 180, 0.8);
+            }
+        }
+
+        .name {
+            font-size: 2.5rem;
+            color: #FFB6C1;
+            text-shadow: 0 0 15px rgba(255, 182, 193, 0.9);
+            margin-top: 20px;
+            animation: nameWobble 3s ease-in-out infinite;
+        }
+
+        @keyframes nameWobble {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(2deg); }
+        }
+
+        .heart-container {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+        }
+
+        .heart {
+            position: absolute;
+            font-size: 2rem;
+            animation: floatUp 3s infinite ease-in;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) translateX(50px) scale(0);
+                opacity: 0;
+            }
+        }
+
+        .particles {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            pointer-events: none;
+        }
+
+        .star {
+            color: #FFD700;
+            font-size: 1.5rem;
+            animation: twinkle 2s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: radial-gradient(circle, #FFD700, transparent);
+            border-radius: 50%;
+            animation: sparkleAnim 1.5s ease-out forwards;
+        }
+
+        @keyframes sparkleAnim {
+            0% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+        }
+
+        .button-group {
+            margin-top: 50px;
+            z-index: 20;
+            position: relative;
+        }
+
+        button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 15px 30px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+
+        button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.1);
+            box-shadow: 0 0 30px rgba(255, 105, 180, 0.8);
+        }
+
+        button:active {
+            transform: scale(0.95);
+        }
+
+        .floating-element {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.3;
+            pointer-events: none;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-20px) rotate(10deg); }
+        }
+
+        .element1 { top: 10%; left: 5%; animation-duration: 6s; }
+        .element2 { top: 15%; right: 10%; animation-duration: 8s; animation-delay: 1s; }
+        .element3 { bottom: 15%; left: 15%; animation-duration: 7s; animation-delay: 2s; }
+        .element4 { bottom: 10%; right: 5%; animation-duration: 9s; animation-delay: 1.5s; }
+
+        .message-line {
+            font-size: 1.3rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-top: 20px;
+            animation: fadeInUp 1.5s ease-in-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-text {
+                font-size: 1.8rem;
+                margin-bottom: 20px;
+            }
+            .name {
+                font-size: 1.5rem;
+                margin-top: 15px;
+            }
+            .message-line {
+                font-size: 1rem;
+                margin-top: 15px;
+            }
+            button {
+                padding: 12px 20px;
+                font-size: 1rem;
+                margin: 8px;
+            }
+            .container {
+                max-width: 90%;
+                padding: 20px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-text {
+                font-size: 1.4rem;
+                margin-bottom: 15px;
+            }
+            .name {
+                font-size: 1.2rem;
+                margin-top: 10px;
+            }
+            .message-line {
+                font-size: 0.9rem;
+                margin-top: 10px;
+            }
+            button {
+                padding: 10px 15px;
+                font-size: 0.9rem;
+                margin: 6px;
+                width: 90%;
+                display: block;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            .button-group {
+                margin-top: 30px;
+            }
+            .container {
+                max-width: 95%;
+                padding: 15px;
+            }
+            .floating-element {
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="heart-container" id="heartContainer"></div>
+    <div class="particles" id="particlesContainer"></div>
+    
+    <div class="floating-element element1">❤️</div>
+    <div class="floating-element element2">✨</div>
+    <div class="floating-element element3">💕</div>
+    <div class="floating-element element4">⭐</div>
+
+    <div class="container">
+        <div class="main-text">Seni Çok Çok Seviyorum</div>
+        <div class="name">Tuğbacığım 💕</div>
+        <div class="message-line">Her yerde, her zaman, seni düşünüyorum...</div>
+        
+        <div class="button-group">
+            <button onclick="createHearts()">❤️ Kalp Yağdır</button>
+            <button onclick="createSparkles()">✨ Işıl Işıl Yap</button>
+            <button onclick="createConfetti()">🎊 Konfeti Fırlat</button>
+            <br><br>
+            <button onclick="window.location.href='animation.html'" style="background: rgba(255, 215, 0, 0.3); border-color: #ffd700;">🎬 Animasyonu Oynat</button>
+            <button onclick="window.location.href='revenge.html'" style="background: rgba(255, 0, 0, 0.3); border-color: #ff6b6b;">👊 Ekreden İntikam Al</button>
+        </div>
+    </div>
+
+    <script>
+        // Floating hearts creation
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.className = 'heart';
+            heart.textContent = '❤️';
+            
+            const randomX = Math.random() * window.innerWidth;
+            const randomDelay = Math.random() * 0.5;
+            const randomDuration = 3 + Math.random() * 2;
+            
+            heart.style.left = randomX + 'px';
+            heart.style.top = window.innerHeight + 'px';
+            heart.style.animationDelay = randomDelay + 's';
+            heart.style.animationDuration = randomDuration + 's';
+            
+            document.getElementById('heartContainer').appendChild(heart);
+            
+            setTimeout(() => heart.remove(), (randomDuration + randomDelay) * 1000);
+        }
+
+        // Continuous heart spawn
+        setInterval(createHeart, 500);
+
+        // Button effects - Create hearts
+        function createHearts() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => createHeart(), i * 100);
+            }
+        }
+
+        // Sparkles effect
+        function createSparkles() {
+            for (let i = 0; i < 30; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                
+                const randomX = Math.random() * window.innerWidth;
+                const randomY = Math.random() * window.innerHeight;
+                
+                sparkle.style.left = randomX + 'px';
+                sparkle.style.top = randomY + 'px';
+                sparkle.style.backgroundColor = `hsl(${Math.random() * 60 + 40}, 100%, 60%)`;
+                
+                document.getElementById('particlesContainer').appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 1500);
+            }
+        }
+
+        // Confetti effect
+        function createConfetti() {
+            const confettiPieces = ['🎉', '🎊', '💕', '✨', '⭐', '🌟', '💖', '💗'];
+            
+            for (let i = 0; i < 40; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'heart';
+                confetti.textContent = confettiPieces[Math.floor(Math.random() * confettiPieces.length)];
+                confetti.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+                
+                const randomX = Math.random() * window.innerWidth;
+                const angle = Math.random() * Math.PI * 2;
+                
+                confetti.style.left = randomX + 'px';
+                confetti.style.top = '50%';
+                confetti.style.setProperty('--tx', Math.cos(angle) * 200 + 'px');
+                confetti.style.setProperty('--ty', Math.sin(angle) * 300 + 'px');
+                confetti.style.animation = `confettiAnim ${2 + Math.random() * 1.5}s ease-out forwards`;
+                
+                document.getElementById('heartContainer').appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 3500);
+            }
+        }
+
+        // Add confetti animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes confettiAnim {
+                0% {
+                    transform: translate(0, 0) scale(1) rotate(0deg);
+                    opacity: 1;
+                }
+                100% {
+                    transform: translate(var(--tx), var(--ty)) scale(0) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Create random stars in the sky
+        function createRandomStars() {
+            const particlesContainer = document.getElementById('particlesContainer');
+            for (let i = 0; i < 20; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.textContent = '⭐';
+                star.style.left = Math.random() * window.innerWidth + 'px';
+                star.style.top = Math.random() * window.innerHeight + 'px';
+                star.style.animationDelay = Math.random() * 2 + 's';
+                particlesContainer.appendChild(star);
+            }
+        }
+
+        createRandomStars();
+
+        // Mouse click effect - create sparkles on click
+        document.addEventListener('click', (e) => {
+            for (let i = 0; i < 10; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                sparkle.style.left = e.clientX + Math.random() * 50 - 25 + 'px';
+                sparkle.style.top = e.clientY + Math.random() * 50 - 25 + 'px';
+                sparkle.style.backgroundColor = `hsl(${280 + Math.random() * 40}, 100%, 60%)`;
+                document.getElementById('particlesContainer').appendChild(sparkle);
+                
+                setTimeout(() => sparkle.remove(), 1500);
+            }
+        });
+
+        // Keyboard effect - when spacebar is pressed, show celebration
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                createConfetti();
+            }
+        });
+    </script>
+</body>
+</html>

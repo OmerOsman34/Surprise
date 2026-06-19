@@ -1,0 +1,808 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animasyon Sahnesi 🎬</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            background: linear-gradient(135deg, #87ceeb 0%, #e0f6ff 50%, #87ceeb 100%);
+            background-size: 400% 400%;
+            animation: skyShift 10s ease infinite;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        @keyframes skyShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .back-button {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 12px 25px;
+            font-size: 1rem;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-weight: bold;
+            z-index: 100;
+        }
+
+        .back-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: scale(1.05);
+        }
+
+        .stage {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* HOCA */
+        .teacher {
+            position: absolute;
+            left: 50%;
+            bottom: 100px;
+            transform: translateX(-50%);
+        }
+
+        .teacher.thinking {
+            animation: thinkingTeacher 2s ease-in-out;
+        }
+
+        .teacher.hit {
+            animation: hitTeacher 0.5s ease-out forwards;
+        }
+
+        .teacher.dead {
+            animation: deadTeacher 1s ease-out forwards;
+        }
+
+        @keyframes thinkingTeacher {
+            0%, 100% { transform: translateX(-50%) rotateZ(0deg); }
+            25% { transform: translateX(-50%) rotateZ(-2deg); }
+            75% { transform: translateX(-50%) rotateZ(2deg); }
+        }
+
+        @keyframes hitTeacher {
+            0% { transform: translateX(-50%) scale(1); }
+            50% { transform: translateX(-30%) scale(0.95) rotateZ(15deg); }
+            100% { transform: translateX(100px) scale(1) rotateZ(90deg) translateY(200px); }
+        }
+
+        @keyframes deadTeacher {
+            0% { transform: translateX(-50%) rotateZ(90deg) translateY(200px); opacity: 1; }
+            100% { transform: translateX(-50%) rotateZ(90deg) translateY(300px); opacity: 0.3; }
+        }
+
+        /* Hoca Kafası */
+        .teacher-head {
+            width: 50px;
+            height: 60px;
+            background: linear-gradient(135deg, #d4a574, #c9925a);
+            border-radius: 40% 40% 50% 50%;
+            position: relative;
+            box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .teacher-hair {
+            width: 65px;
+            height: 35px;
+            background: linear-gradient(135deg, #8b4789, #6b3570);
+            border-radius: 50% 50% 40% 40%;
+            position: absolute;
+            top: -18px;
+            left: -7.5px;
+            box-shadow: inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .teacher-hair::before {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 15px;
+            background: linear-gradient(135deg, #8b4789, #6b3570);
+            border-radius: 50% 50% 30% 30%;
+            left: -8px;
+            top: 15px;
+            box-shadow: -5px 5px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .teacher-hair::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 15px;
+            background: linear-gradient(135deg, #8b4789, #6b3570);
+            border-radius: 50% 50% 30% 30%;
+            right: -8px;
+            top: 15px;
+            box-shadow: 5px 5px 0 rgba(0, 0, 0, 0.1);
+        }
+
+        .teacher-eyes {
+            position: absolute;
+            width: 35px;
+            height: 15px;
+            top: 20px;
+            left: 7.5px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .teacher-eye {
+            width: 10px;
+            height: 12px;
+            background: white;
+            border-radius: 50%;
+            position: relative;
+        }
+
+        .teacher-eye::after {
+            content: '';
+            width: 5px;
+            height: 8px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            top: 2px;
+            left: 2.5px;
+        }
+
+        .teacher-mouth {
+            position: absolute;
+            width: 20px;
+            height: 8px;
+            background: #ff69b4;
+            bottom: 12px;
+            left: 15px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Hoca Vücut */
+        .teacher-body {
+            width: 40px;
+            height: 80px;
+            background: linear-gradient(135deg, #e91e63, #c2185b);
+            margin-top: 0;
+            border-radius: 10px 10px 0 0;
+            position: relative;
+        }
+
+        .teacher-tie {
+            width: 8px;
+            height: 40px;
+            background: #dc143c;
+            position: absolute;
+            top: 10px;
+            left: 16px;
+            border-radius: 4px;
+        }
+
+        .teacher-name {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(139, 71, 137, 0.9);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+        }
+            left: 21px;
+            border-radius: 4px;
+        }
+
+        /* Sınav Kağıtları */
+        .papers {
+            position: absolute;
+            width: 40px;
+            height: 50px;
+            top: 20px;
+            left: -60px;
+        }
+
+        .paper {
+            position: absolute;
+            width: 35px;
+            height: 45px;
+            background: white;
+            border: 1px solid #ccc;
+            padding: 3px;
+            font-size: 8px;
+            line-height: 1.2;
+            box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .paper1 {
+            transform: rotate(-5deg) translateX(0);
+            z-index: 3;
+        }
+
+        .paper2 {
+            transform: rotate(5deg) translateX(10px) translateY(5px);
+            z-index: 2;
+        }
+
+        .paper3 {
+            transform: rotate(-2deg) translateX(5px) translateY(10px);
+            z-index: 1;
+        }
+
+        .teacher.thinking .papers {
+            animation: papersShake 0.5s ease-in-out infinite;
+        }
+
+        @keyframes papersShake {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-5deg); }
+            75% { transform: rotate(5deg); }
+        }
+
+        /* Konuşma Balonu */
+        .speech-bubble {
+            position: absolute;
+            background: white;
+            border: 2px solid #333;
+            border-radius: 15px;
+            padding: 15px 20px;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #333;
+            width: 280px;
+            top: -80px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            white-space: normal;
+            text-align: center;
+            z-index: 50;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .speech-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 10px solid white;
+        }
+
+        .speech-bubble.show {
+            animation: speechShow 0.5s ease-out forwards;
+        }
+
+        @keyframes speechShow {
+            0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        @keyframes speechHide {
+            0% { opacity: 1; transform: translateX(-50%) translateY(0); }
+            100% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+        }
+
+        .speech-bubble.hide {
+            animation: speechHide 0.5s ease-out forwards;
+        }
+
+        /* ÖMER (Kahraman) */
+        .omer {
+            position: absolute;
+            left: -150px;
+            bottom: 150px;
+            width: 60px;
+            height: 80px;
+        }
+
+        .omer.attack {
+            animation: omerFly 1s ease-in-out forwards;
+        }
+
+        @keyframes omerFly {
+            0% {
+                left: -150px;
+                transform: rotateZ(0deg) scaleX(1);
+            }
+            50% {
+                left: 50%;
+                transform: rotateZ(-15deg) scaleX(1);
+            }
+            75% {
+                left: calc(50% + 100px);
+                transform: rotateZ(-30deg) scaleX(1);
+            }
+            100% {
+                left: calc(50% + 200px);
+                transform: rotateZ(0deg) scaleX(-1);
+            }
+        }
+            }
+        }
+
+        /* Ömer Head */
+        .omer-head {
+            width: 35px;
+            height: 40px;
+            background: linear-gradient(135deg, #d4a574, #c9925a);
+            border-radius: 50%;
+            position: absolute;
+            top: 0;
+            box-shadow: inset -1px -1px 3px rgba(0, 0, 0, 0.2);
+        }
+
+        .omer-hair {
+            width: 38px;
+            height: 15px;
+            background: #1a1a1a;
+            border-radius: 50% 50% 0 0;
+            position: absolute;
+            top: -8px;
+            left: -1.5px;
+        }
+
+        .omer-face-mark {
+            width: 5px;
+            height: 8px;
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            position: absolute;
+            right: 5px;
+            top: 15px;
+        }
+
+        /* Ömer Body */
+        .omer-body {
+            width: 35px;
+            height: 25px;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a6f);
+            position: absolute;
+            top: 35px;
+            border-radius: 5px 5px 0 0;
+        }
+
+        /* Ömer Bacak */
+        .omer-leg {
+            position: absolute;
+            width: 12px;
+            height: 20px;
+            background: #333;
+            bottom: -20px;
+            border-radius: 3px;
+        }
+
+        .omer-leg-left {
+            left: 5px;
+        }
+
+        .omer-leg-right {
+            right: 5px;
+        }
+
+        .omer-name {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 0, 0, 0.8);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            white-space: nowrap;
+            opacity: 0;
+        }
+
+        .omer.attack .omer-name {
+            animation: nameShow 0.5s ease-out 0.3s forwards;
+        }
+
+        @keyframes nameShow {
+            0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+            100% { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        /* Uçan Tekme Efekti */
+        .kick-effect {
+            position: absolute;
+            font-size: 2.5rem;
+            opacity: 0;
+            pointer-events: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .kick-text {
+            position: fixed;
+            top: 50px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.9);
+            color: #ffd700;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            white-space: nowrap;
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 25px rgba(255, 215, 0, 0.8);
+            z-index: 100;
+            animation: textFadeOut 3s ease-in 1s forwards;
+        }
+
+        @keyframes textFadeOut {
+            0% { opacity: 1; transform: translateX(-50%) scale(1); }
+            90% { opacity: 1; transform: translateX(-50%) scale(1); }
+            100% { opacity: 0; transform: translateX(-50%) scale(0.9); }
+        }
+
+        .kick-effect.show {
+            animation: kickShow 1s ease-out forwards;
+        }
+
+        @keyframes kickShow {
+            0% { opacity: 1; transform: scale(0.5) rotate(0deg); }
+            100% { opacity: 0; transform: scale(1.5) rotate(90deg); }
+        }
+
+        /* Kalpler */
+        .heart-sparkle {
+            position: fixed;
+            font-size: 2rem;
+            pointer-events: none;
+            animation: sparkleFloat 2s ease-out forwards;
+        }
+
+        @keyframes sparkleFloat {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(0.5); }
+        }
+
+        @media (max-width: 768px) {
+            .stage {
+                flex-direction: column;
+                padding: 20px;
+            }
+
+            .title {
+                font-size: 1.8rem;
+                top: 15px;
+            }
+
+            .teacher {
+                bottom: 60px;
+                transform: scale(0.85);
+            }
+
+            .omer {
+                width: 40px;
+                height: 60px;
+                bottom: 100px;
+            }
+
+            .papers {
+                width: 30px;
+                height: 40px;
+                left: -50px;
+            }
+
+            .paper {
+                width: 28px;
+                height: 38px;
+                font-size: 7px;
+            }
+
+            .back-button {
+                padding: 10px 20px;
+                font-size: 0.9rem;
+                top: 15px;
+                left: 15px;
+            }
+
+            .speech-bubble {
+                width: 240px;
+                font-size: 0.9rem;
+                padding: 12px 15px;
+                top: -70px;
+            }
+
+            .kick-text {
+                font-size: 1.1rem;
+                padding: 12px 20px;
+                border: 2px solid #ffd700;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stage {
+                flex-direction: column;
+                padding: 10px;
+            }
+
+            .title {
+                font-size: 1.3rem;
+                top: 10px;
+            }
+
+            .teacher {
+                bottom: 50px;
+                transform: scale(0.7);
+            }
+
+            .teacher-head {
+                width: 40px;
+                height: 48px;
+            }
+
+            .teacher-body {
+                width: 32px;
+                height: 64px;
+            }
+
+            .omer {
+                width: 30px;
+                height: 50px;
+                bottom: 80px;
+            }
+
+            .omer-head {
+                width: 25px;
+                height: 30px;
+            }
+
+            .omer-body {
+                width: 25px;
+                height: 20px;
+            }
+
+            .papers {
+                width: 25px;
+                height: 35px;
+                left: -40px;
+            }
+
+            .paper {
+                width: 23px;
+                height: 32px;
+                font-size: 6px;
+            }
+
+            .back-button {
+                padding: 8px 15px;
+                font-size: 0.8rem;
+                top: 10px;
+                left: 10px;
+            }
+
+            .speech-bubble {
+                width: 200px;
+                font-size: 0.8rem;
+                padding: 10px 12px;
+                top: -65px;
+            }
+
+            .speech-bubble::after {
+                border-left: 8px solid transparent;
+                border-right: 8px solid transparent;
+                border-top: 8px solid white;
+            }
+
+            .kick-text {
+                font-size: 0.95rem;
+                padding: 10px 15px;
+                border: 2px solid #ffd700;
+                top: 40px;
+            }
+
+            .omer-name {
+                font-size: 0.7rem;
+                padding: 3px 6px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <button class="back-button" onclick="window.location.href='index.html'">← Geri Dön</button>
+
+    <div class="container">
+        <div class="stage">
+            <!-- Hoca -->
+            <div class="teacher" id="teacher">
+                <div class="teacher-name">Müge Hoca 👩‍🏫</div>
+                
+                <div class="papers">
+                    <div class="paper paper1">📄<br>100<br>90<br>85</div>
+                    <div class="paper paper2">📄<br>95<br>88</div>
+                    <div class="paper paper3">📄<br>92<br>87</div>
+                </div>
+                
+                <div class="teacher-head">
+                    <div class="teacher-hair"></div>
+                    <div class="teacher-eyes">
+                        <div class="teacher-eye"></div>
+                        <div class="teacher-eye"></div>
+                    </div>
+                    <div class="teacher-mouth"></div>
+                </div>
+
+                <div class="teacher-body">
+                    <div class="teacher-tie"></div>
+                </div>
+
+                <div class="speech-bubble" id="speechBubble">
+                    Olamaz! Tuğba nasıl 100 alabilir?<br>
+                    Bir ibnelik yapmalıyım!
+                </div>
+            </div>
+
+            <!-- Ömer -->
+            <div class="omer" id="omer">
+                <div class="omer-name">Ömer ⚡</div>
+                <div class="omer-head">
+                    <div class="omer-hair"></div>
+                    <div class="omer-face-mark"></div>
+                </div>
+                <div class="omer-body"></div>
+                <div class="omer-leg omer-leg-left"></div>
+                <div class="omer-leg omer-leg-right"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let animationStarted = false;
+
+        function startAnimation() {
+            if (animationStarted) return;
+            animationStarted = true;
+
+            const teacher = document.getElementById('teacher');
+            const omer = document.getElementById('omer');
+            const speechBubble = document.getElementById('speechBubble');
+
+            // 1. Hoca düşün ve konuş (0-2.5s)
+            setTimeout(() => {
+                teacher.classList.add('thinking');
+                speechBubble.classList.add('show');
+            }, 800);
+
+            // 2. Ömer uçarak gelsin (2.5-4s)
+            setTimeout(() => {
+                speechBubble.classList.remove('show');
+                speechBubble.classList.add('hide');
+                omer.classList.add('attack');
+                createKickEffect();
+            }, 3500);
+
+            // 3. Hocaya vuruş (4-4.5s)
+            setTimeout(() => {
+                teacher.classList.remove('thinking');
+                teacher.classList.add('hit');
+            }, 4300);
+
+            // 4. Hoca ölsün (4.5-5.5s)
+            setTimeout(() => {
+                teacher.classList.remove('hit');
+                teacher.classList.add('dead');
+                createVictoryEffect();
+            }, 5000);
+
+            // 5. Yeniden başlamaya hazır
+            setTimeout(() => {
+                animationStarted = false;
+                resetAnimation();
+            }, 6500);
+        }
+
+        function createKickEffect() {
+            // Üstte ortada kalacak yazı
+            const textElement = document.createElement('div');
+            textElement.className = 'kick-text';
+            textElement.textContent = 'Ömer Hocaya Uçan Tekme Atar! ⚡';
+            document.body.appendChild(textElement);
+
+            // Tekme efekti (ortada)
+            const effect = document.createElement('div');
+            effect.className = 'kick-effect show';
+            effect.textContent = '🦵💥';
+            effect.style.left = '50%';
+            effect.style.top = '50%';
+            effect.style.transform = 'translate(-50%, -50%)';
+            document.querySelector('.stage').appendChild(effect);
+
+            // Elementin kaldırılması
+            setTimeout(() => effect.remove(), 1000);
+            setTimeout(() => textElement.remove(), 4000);
+        }
+
+        function createVictoryEffect() {
+            const messages = ['❤️', '💪', '🎉', '⚡', '✨', '🏆'];
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart-sparkle';
+                heart.textContent = messages[Math.floor(Math.random() * messages.length)];
+                heart.style.left = Math.random() * window.innerWidth + 'px';
+                heart.style.top = '50%';
+                heart.style.animationDelay = Math.random() * 0.5 + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 2000);
+            }
+        }
+
+        function resetAnimation() {
+            const teacher = document.getElementById('teacher');
+            const omer = document.getElementById('omer');
+            const speechBubble = document.getElementById('speechBubble');
+
+            teacher.classList.remove('thinking', 'hit', 'dead');
+            omer.classList.remove('attack');
+            speechBubble.classList.remove('show', 'hide');
+            speechBubble.style.opacity = '0';
+
+            omer.style.left = '-150px';
+        }
+
+        // Tıkla animasyonu başlat
+        document.addEventListener('click', (e) => {
+            // Buton dışına tıklanırsa
+            if (!e.target.classList.contains('back-button')) {
+                startAnimation();
+            }
+        });
+
+        // Space tuşu
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space') {
+                e.preventDefault();
+                startAnimation();
+            }
+        });
+
+        // Sayfa açılınca hemen başlasın
+        setTimeout(() => {
+            startAnimation();
+        }, 1000);
+    </script>
+</body>
+</html>
